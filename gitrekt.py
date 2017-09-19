@@ -40,7 +40,7 @@ with requests.Session() as session:
 
 #####
 #Searching
-file = open('/root/Desktop/json.txt', 'w')
+#file = open('~/Desktop/json.txt', 'w')
 header_text_highlite = {'Accept': 'application/vnd.github.v3.text-match+json'}
 counter = 0
 while (counter <= gitPages):
