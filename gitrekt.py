@@ -12,7 +12,7 @@ parser.add_argument('-u', '--user', default='invalid', type=str, help='Github Us
 parser.add_argument('-p', '--password', default='invalid', type=str, help='Github Password')
 parser.add_argument('-t', '--term', default='invalid', type=str, help='Search Term')
 try:
-    options = parser.parse_args()
+    args = parser.parse_args()
 except:
     parser.print_help()
     sys.exit(0)
