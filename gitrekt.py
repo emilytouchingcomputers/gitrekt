@@ -63,5 +63,5 @@ while (counter <= gitPages):
 			print("")
 			print("")
 		counter += 1
-		print("NEXT PAGE: "+ counter)
+		print("NEXT PAGE: "+ str(counter))
 ####################################################################################################
