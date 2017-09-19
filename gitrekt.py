@@ -1,14 +1,10 @@
-#NOTES
-#I DONT KNOW WHAT THIS DOES?
-#cat json.txt | python -m json.tool >> pretty.txt
-#
 from requests.auth import HTTPBasicAuth
 from gitrekt_paginator import pagination
 import requests
 import json
 import argparse
 import re
-
+#cat json.txt | python -m json.tool >> pretty.txt
 
 ####################################################################################################
 #Arg Parsing
@@ -25,7 +21,6 @@ gitTerm = args.term
 gitPages = 0
 ####################################################################################################
 
-####################################################################################################
 #Searching
 #file = open('~/Desktop/json.txt', 'w')
 gitPages = pagination(gitUser, gitPass, gitTerm)
