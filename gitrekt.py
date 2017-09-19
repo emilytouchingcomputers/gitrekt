@@ -4,8 +4,6 @@ import requests
 import json
 import argparse
 import re
-#cat json.txt | python -m json.tool >> pretty.txt
-
 ####################################################################################################
 #Arg Parsing
 #Take user/password/search term.  Need to add error handling.
