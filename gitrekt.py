@@ -24,4 +24,3 @@ with requests.Session() as session:
 		print("")
 		print("")
 
-https://github.com/invpdx/gitrekt/invitations
