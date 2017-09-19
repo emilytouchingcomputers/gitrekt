@@ -22,3 +22,5 @@ git add file_i_changed
 git commit -m "comments"
 
 git commit
+
+git push
