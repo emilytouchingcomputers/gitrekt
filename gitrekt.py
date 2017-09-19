@@ -8,19 +8,18 @@ import re
 #Arg Parsing
 #Take user/password/search term.  Need to add error handling.
 parser = argparse.ArgumentParser()
-parser.add_argument('-u', '--user', type=str, help='Github Username')
-parser.add_argument('-p', '--password', type=str, help='Github Password')
-parser.add_argument('-t', '--term', type=str, help='Search Term')
-try:
-    args = parser.parse_args()
-except:
-    parser.print_help()
-    sys.exit(0)
+parser.add_argument('-u', '--user', default = 'invalid',  type=str, help='Github Username')
+parser.add_argument('-p', '--password', default = 'invalid',  type=str, help='Github Password')
+parser.add_argument('-t', '--term', default = 'invalid', type=str, help='Search Term')
+args = parser.parse_args()
 
 gitUser = args.user
 gitPass = args.password
 gitTerm = args.term
 gitPages = 0
+if (gitUser == 'invalid' or  gitPass == 'invalid' or gitTerm == 'invalid'):
+	parser.print_help()
+
 ####################################################################################################
 
 #Searching
