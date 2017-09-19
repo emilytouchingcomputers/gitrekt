@@ -35,4 +35,3 @@ with requests.Session() as session:
 		print("*************************************************************")
 		print("")
 		print("")
-
