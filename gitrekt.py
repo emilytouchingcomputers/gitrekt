@@ -40,7 +40,7 @@ with requests.Session() as session:
 
 #####
 #Searching
-#file = open('/Users/username/Desktop/json.txt', 'w')
+file = open('/root/Desktop/json.txt', 'w')
 header_text_highlite = {'Accept': 'application/vnd.github.v3.text-match+json'}
 counter = 0
 while (counter <= gitPages):
@@ -53,11 +53,11 @@ while (counter <= gitPages):
 		count = len(j["items"])
 		for x in range(0, count):
 			print("Repo Name: " + j['items'][x]['repository']['name'])
-		#print("Filename: " + j['items'][x]['name'])
-		#print("Matched Code: " + j['items'][x]['text_matches'][0]['fragment'])
-		#print("Repo URL: " + j['items'][x]['html_url'])
-		#print("*************************************************************")
-		#print("")
-		#print("")
+			print("Filename: " + j['items'][x]['name'])
+			print("Matched Code: " + j['items'][x]['text_matches'][0]['fragment'])
+			print("Repo URL: " + j['items'][x]['html_url'])
+			print("*************************************************************")
+			print("")
+			print("")
 		counter += 1
 		print counter
