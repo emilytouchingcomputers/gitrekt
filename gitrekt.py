@@ -36,19 +36,23 @@ while (counter <= gitPages):
 		#Our results are stored in var data
 		data = search.text
 	        #Load those results into the json parser
-		j = json.loads(data)
-		#Bro I don't even know.  Wrote this code months ago and can't figure out whats going on.  JSON parsing is hard.
-		count = len(j["items"])
-		for x in range(0, count):
-			print("Repo Name: " + j['items'][x]['repository']['name'])
-			print("Filename: " + j['items'][x]['name'])
-			print("Matched Code: " + j['items'][x]['text_matches'][0]['fragment'])
-			print("Repo URL: " + j['items'][x]['html_url'])
-			print("*************************************************************")
-			print("")
-			print("")
+		try:
+			j = json.loads(data)
+			#Bro I don't even know.  Wrote this code months ago and can't figure out whats going on.  JSON parsing is hard.
+			count = len(j["items"])
+			for x in range(0, count):
+				print("<BEGIN>")
+				print("Repo Name: " + j['items'][x]['repository']['name'])
+				print("Filename: " + j['items'][x]['name'])
+				print("Matched Code: " + j['items'][x]['text_matches'][0]['fragment'])
+				print("Repo URL: " + j['items'][x]['html_url'])
+				print("<END>")
+				#print("*************************************************************")
+				print("")
+		except:
+			continue
 		#Increase our counter to change the search page to the next one	
 		counter += 1
 		#Print what the next page of results is
-		print("NEXT PAGE: "+ str(counter))
+		print("*********************************************************************NEXT PAGE: "+ str(counter))
 ####################################################################################################
