@@ -1,3 +1,6 @@
+from requests.auth import HTTPBasicAuth
+import requests
+import re
 def pagination(gitUser, gitPass):
 	header_text_highlite = {'Accept': 'application/vnd.github.v3.text-match+json'}
 	with requests.Session() as session:
