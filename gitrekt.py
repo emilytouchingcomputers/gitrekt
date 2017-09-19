@@ -28,7 +28,7 @@ gitPages = 0
 ####################################################################################################
 #Searching
 #file = open('~/Desktop/json.txt', 'w')
-gitPages = pagination(gitUser, gitPass)
+gitPages = pagination(gitUser, gitPass, gitTerm)
 header_text_highlite = {'Accept': 'application/vnd.github.v3.text-match+json'}
 counter = 0
 while (counter <= gitPages):
