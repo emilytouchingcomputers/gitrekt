@@ -1,1 +1,3 @@
+USE THIS FOR NOTE SHARING
+#I think this line turns the normal API responses into prettified JSON.  Unsure.
 #cat json.txt | python -m json.tool >> pretty.txt
