@@ -8,9 +8,9 @@ import re
 #Arg Parsing
 #Take user/password/search term.  Need to add error handling.
 parser = argparse.ArgumentParser()
-parser.add_argument('-u', '--user', default='invalid', type=str, help='Github Username')
-parser.add_argument('-p', '--password', default='invalid', type=str, help='Github Password')
-parser.add_argument('-t', '--term', default='invalid', type=str, help='Search Term')
+parser.add_argument('-u', '--user', type=str, help='Github Username')
+parser.add_argument('-p', '--password', type=str, help='Github Password')
+parser.add_argument('-t', '--term', type=str, help='Search Term')
 try:
     args = parser.parse_args()
 except:
