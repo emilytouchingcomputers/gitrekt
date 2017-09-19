@@ -33,9 +33,9 @@ def pagination(gitUser, gitPass):
         	#mystring = search.headers
         	link = search.headers.get('link', None)
         	if link is not None:
-                	print link
+                	#print link
                 	m = re.search('page=(\d+.)>; rel="last"', link)
-                	print m.group(1)
+                	print("MAX PAGES: " + m.group(1))
 			maxPages = m.group(1)
 			return maxPages
 ####################################################################################################
@@ -63,5 +63,5 @@ while (counter <= gitPages):
 			print("")
 			print("")
 		counter += 1
-		print counter
+		print("NEXT PAGE: "+ counter)
 ####################################################################################################
