@@ -8,7 +8,7 @@ import json
 import argparse
 import re
 
-#####
+####################################################################################################
 #Arg Parsing
 #Take user/password/search term.  Need to add error handling.
 parser = argparse.ArgumentParser()
@@ -21,26 +21,29 @@ gitUser = args.user
 gitPass = args.password
 gitTerm = args.term
 gitPages = 0
-#####
+####################################################################################################
 
-#####
+####################################################################################################
 #Check pagination to see how many times we need to repeat the search
 #This is bad and needs to be refactored
-header_text_highlite = {'Accept': 'application/vnd.github.v3.text-match+json'}
-with requests.Session() as session:
-        search = session.head('https://api.github.com/search/code?q='+gitTerm+'+in:file', headers=header_text_highlite, auth=HTTPBasicAuth(gitUser, gitPass))
-        #mystring = search.headers
-        link = search.headers.get('link', None)
-        if link is not None:
-                print link
-                m = re.search('page=(\d+.)>; rel="last"', link)
-                print m.group(1)
-		gitPages = m.group(1)
-#####
+def pagination(gitUser, gitPass):
+	header_text_highlite = {'Accept': 'application/vnd.github.v3.text-match+json'}
+	with requests.Session() as session:
+       		search = session.head('https://api.github.com/search/code?q='+gitTerm+'+in:file', headers=header_text_highlite, auth=HTTPBasicAuth(gitUser, gitPass))
+        	#mystring = search.headers
+        	link = search.headers.get('link', None)
+        	if link is not None:
+                	print link
+                	m = re.search('page=(\d+.)>; rel="last"', link)
+                	print m.group(1)
+			maxPages = m.group(1)
+			return maxPages
+####################################################################################################
 
-#####
+####################################################################################################
 #Searching
 #file = open('~/Desktop/json.txt', 'w')
+gitPages = pagination(gitUser, gitPass)
 header_text_highlite = {'Accept': 'application/vnd.github.v3.text-match+json'}
 counter = 0
 while (counter <= gitPages):
@@ -61,3 +64,4 @@ while (counter <= gitPages):
 			print("")
 		counter += 1
 		print counter
+####################################################################################################
