@@ -2,3 +2,23 @@
 gitrekt
 
 github codesearch for recon
+
+USE THIS FOR NOTE SHARING
+
+#I think this line turns the normal API responses into prettified JSON.  Unsure.
+
+#cat json.txt | python -m json.tool >> pretty.txt
+
+
+HOW TO USE GIT HOLY CRAP
+
+
+git clone (repoURL)
+
+git pull origin master
+
+git add file_i_changed
+
+git commit -m "comments"
+
+git commit
