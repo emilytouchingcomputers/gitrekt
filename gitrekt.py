@@ -1,7 +1,7 @@
 #NOTES
 #I DONT KNOW WHAT THIS DOES?
 #cat json.txt | python -m json.tool >> pretty.txt
-#
+#NEW LINE
 from requests.auth import HTTPBasicAuth
 import requests
 import json
