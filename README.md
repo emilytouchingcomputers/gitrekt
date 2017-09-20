@@ -1,10 +1,18 @@
-# gitrekt github codesearch for recon
+GitRekt
+#github code search recon tool
+===================
 
 ToDo:
 
-`Possible off-by-one issues when catching errors.  Page count seems to be off.`
+Possible off-by-one on pagination, especially when catching rate limit
 
-I think this line turns the normal API responses into prettified JSON.  Unsure.
+----------
+
+
+Use
+-------------
+
+python gitrekt.py -u github_username -p github_pass -t search_term
 
 #cat json.txt | python -m json.tool >> pretty.txt
 
