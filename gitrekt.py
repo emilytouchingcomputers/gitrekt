@@ -25,64 +25,48 @@ if (gitUser == 'invalid' or  gitPass == 'invalid' or gitTerm == 'invalid'):
 	parser.print_help()
 
 ####################################################################################################
-
 #Search functionality
 #Gets the max number of results pages so we can go through all of them since github api only returns one page at a time
 gitPages = pagination(gitUser, gitPass, gitTerm)
+#No clue what this is for but it breaks the script if it's not here
 header_text_highlite = {'Accept': 'application/vnd.github.v3.text-match+json'}
 #While loop and counter for getting all pages of results
 counter = 1
+#Yeah so turns out gitPages was returning a string and it was ruining this while test, so now we cast it to int because that wasted 4 hours of my life.
+gitPages = int(gitPages)
 while (counter != gitPages):
-	print("TOP OF THE WHILE LOOP")
 	with requests.Session() as session:
-		print("IN THE WITH LOOP")
-		search = session.get('https://api.github.com/search/code?q='+gitTerm+'+in:file&page=' + str(counter), headers=header_text_highlite, auth=HTTPBasicAuth(gitUser, gitPass))
-		#Our results are stored in var data
-		data = search.text
-		#Was catching errors when we rate limited.
-		#This clearly screws up JSON parsing as well, so we deal with that in the TRY/EXCEPT block below
-		#if "abuse-rate-limits" in data:
-		#	print ("RATE LIMITED!")
-		#	print("SLEEPING 60 SECONDS")
-		#	time.sleep(60)
-		#	print("RESUMING!")
-	        #Load those results into the json parser
 		try:
-			print("IN THE TOP OF THE TRY STATEMENT")
 			with requests.Session() as session:
                 		search = session.get('https://api.github.com/search/code?q='+gitTerm+'+in:file&page=' + str(counter), headers=header_text_highlite, auth=HTTPBasicAuth(gitUser, gitPass))
                 		#Our results are stored in var data
                 		data = search.text
+				#Load the results into the JSON parser
 				j = json.loads(data)
 				#Bro I don't even know.  Wrote this code months ago and can't figure out whats going on.  JSON parsing is hard.
 				count = len(j["items"])
 				for x in range(0, count):
-					print("<BEGIN>")
-					print("Repo Name: " + j['items'][x]['repository']['name'])
-					#print("Filename: " + j['items'][x]['name'])
-					#print("Matched Code: " + j['items'][x]['text_matches'][0]['fragment'])
-					#print("Repo URL: " + j['items'][x]['html_url'])
-					print("<END>")
-					print(counter)
-					#print("*************************************************************")
+					print("<RESULT>")
+					print("<REPO_NAME> " + j['items'][x]['repository']['name'])
+					print("</REPO_NAME>")
+					print("<FILENAME> " + j['items'][x]['name'])
+					print("</FILENAME>")
+					print("<CODE> " + j['items'][x]['text_matches'][0]['fragment'])
+					print("</CODE>")
+					print("<REPO_URL> " + j['items'][x]['html_url'])
+					print("</REPO_URL>")
+					print("</RESULT>")
 					print("")
-			print("BOTTOM OF THE TRY STATEMENT")
 		except Exception:
-			print("TOP OF THE EXCEPTION")
-			#We caught a rate limit and it screwed us up. 
-			#Since we still tried to parse it, and then we pass to the counter +=1
-			#We need to decrease the counter by one to continue where we left off so 
-			#We won't miss a page
-			print("EXCEPTION!")
+			#We probably caught a rate limit
 			if "abuse-rate-limits" in data:
                         	print ("RATE LIMITED!")
                         	print("SLEEPING 60 SECONDS")
                         	time.sleep(60)
                         	print("RESUMING!")
 			continue
-		#Increase our counter to change the search page to the next one	
+	#Increase our counter to change the search page to the next one	
 	counter += 1
-	print("WE JUST INCREMENTED THE COUNTER WOWZERS")
-		#Print what the next page of results is
-	print("*********************************************************************NEXT PAGE: "+ str(counter))
+	#Print what the next page of results is
+	#print("*********************************************************************NEXT PAGE: "+ str(counter))
 ####################################################################################################

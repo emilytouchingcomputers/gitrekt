@@ -16,9 +16,12 @@ def pagination(gitUser, gitPass, gitTerm):
         	if link is not None:
                 	#print link
 			#regex to grab the page number of the last page of results
-                	m = re.search('page=(\d+.)>; rel="last"', link)
+			try:
+                		m = re.search('page=(\d+.)>; rel="last"', link)
 			#print the number of pages (i.e. the number of the last page)
-                	print("MAX PAGES: " + m.group(1))
-			maxPages = m.group(1)
+                		#print("MAX PAGES: " + m.group(1))
+				maxPages = m.group(1)
+			except:
+				maxPages = 1
 			#return maxpages to gitrekt.py for our while loop for searching
 			return maxPages
