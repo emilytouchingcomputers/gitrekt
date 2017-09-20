@@ -1,9 +1,11 @@
 # gitrekt
-gitrekt
 
-github codesearch for recon
+# github codesearch for recon
 
-USE THIS FOR NOTE SHARING
+# TODO:
+Possible off-by-one issues when catching errors.  Page count seems to be off.
+
+
 
 #I think this line turns the normal API responses into prettified JSON.  Unsure.
 
@@ -11,7 +13,6 @@ USE THIS FOR NOTE SHARING
 
 
 HOW TO USE GIT HOLY CRAP
-
 
 git clone (repoURL)
 
