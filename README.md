@@ -1,6 +1,6 @@
 GitRekt
 ===================
-# github code search recon tool
+**github code search recon tool**
 
 ToDo:
 
