@@ -40,7 +40,7 @@ counter = 1
 #Yeah so turns out gitPages was returning a string and it was ruining this while test, so now we cast it to int because that wasted 4 hours of my life.
 gitPages = int(gitPages)
 f = open('results_' + gitTerm + "_.txt", 'w+')
-while (counter != gitPages):
+while (counter < gitPages+1):
 	with requests.Session() as session:
 		try:
 			with requests.Session() as session:
