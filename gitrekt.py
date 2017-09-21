@@ -28,7 +28,7 @@ gitPages = 0
 #This checks to make sure people filled out all of the args
 if (gitUser == 'invalid' or  gitPass == 'invalid' or gitTerm == 'invalid'):
 	parser.print_help()
-
+	sys.exit()
 ####################################################################################################
 #Search functionality
 #Gets the max number of results pages so we can go through all of them since github api only returns one page at a time
@@ -61,6 +61,11 @@ while (counter != gitPages):
 					f.write("</CODE>\n")
 					f.write("<REPO_URL> " + j['items'][x]['html_url'])
 					f.write("</REPO_URL>\n")
+					m = re.search('github.com/(\w+.)/', j['items'][x]['html_url'])
+					user = m.group(1)
+					f.write("<USER>")
+					f.write(user)
+					f.write("</USER>\n")
 					f.write("</RESULT>\n")
 					f.write("\n\n")
 		except Exception:
