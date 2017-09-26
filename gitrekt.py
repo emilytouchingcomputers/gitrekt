@@ -11,6 +11,7 @@ import argparse
 import re
 import time
 import sys
+import cgi
 ####################################################################################################
 #Arg Parsing
 #Take user/password/search term.
@@ -52,21 +53,24 @@ while (counter < gitPages+1):
                                 #Bro I don't even know.  Wrote this code months ago and can't figure out whats going on.  JSON parsing is hard.
                                 count = len(j["items"])
                                 for x in range(0, count):
-                                        f.write("<RESULT class='result'>\n")
+                                        f.write("<RESULT class='result'>")
                                         f.write("<b>REPO NAME: </b> " + j['items'][x]['repository']['name'])
-                                        f.write("<br>\n")
+                                        f.write("<br>")
                                         f.write("<b>FILE NAME: </b> " + j['items'][x]['name'])
-                                        f.write("<br>\n")
+                                        f.write("<br>")
                                         f.write("<b>URL: </b><a href=\" " + j['items'][x]['html_url'])
-                                        f.write("\">LINK</a><br>\n")
+                                        f.write("\">LINK</a><br>")
                                         m = re.search('github.com/(\w+.)/', j['items'][x]['html_url'])
                                         user = m.group(1)
                                         f.write("<b>USER: </b>")
                                         f.write(user)
-                                        f.write("<br>\n")
-					f.write("<b>SNIPPET: </b><pre> " + j['items'][x]['text_matches'][0]['fragment'])
-                                        f.write("</pre><br>\n")
-                                        f.write("</RESULT>\n")
+                                        f.write("<br>")
+					f.write("<b>SNIPPET: </b><pre> ") 
+					code_string = (j['items'][x]['text_matches'][0]['fragment'])
+					escaped = cgi.escape(code_string)
+					f.write(escaped)
+                                        f.write("</pre><br>")
+                                        f.write("</RESULT>")
                                         f.write("<br><br>\n\n")
                 except Exception:
                         #We probably caught a rate limit
