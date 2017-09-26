@@ -12,24 +12,28 @@ import re
 import time
 import sys
 import cgi
+import getpass
 ####################################################################################################
 #Arg Parsing
 #Take user/password/search term.
 parser = argparse.ArgumentParser()
 parser.add_argument('-u', '--user', default = 'invalid',  type=str, help='Github Username')
-parser.add_argument('-p', '--password', default = 'invalid',  type=str, help='Github Password')
+#parser.add_argument('-p', '--password', default = 'invalid',  type=str, help='Github Password')
 parser.add_argument('-t', '--term', default = 'invalid', type=str, help='Search Term')
 args = parser.parse_args()
 
+
+
 #Turn our args into vars
 gitUser = args.user
-gitPass = args.password
 gitTerm = args.term
 gitPages = 0
 #This checks to make sure people filled out all of the args
-if (gitUser == 'invalid' or  gitPass == 'invalid' or gitTerm == 'invalid'):
+if (gitUser == 'invalid' or gitTerm == 'invalid'):
 	parser.print_help()
 	sys.exit()
+#This is for password input - it's invisible in the command line.
+gitPass = getpass.getpass("GitHub Password: ")
 ####################################################################################################
 #Search functionality
 #Gets the max number of results pages so we can go through all of them since github api only returns one page at a time
