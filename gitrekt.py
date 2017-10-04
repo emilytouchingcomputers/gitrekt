@@ -1,7 +1,13 @@
+#VERSION 0.3b
+#October 4, 2017
 ##################################################################################################
 #TODO:
-#POSSIBLE OFF BY 1 WHEN GETTING PAGES
-#POSSIBLE OFF BY 1 WHEN CATCHING RATE LIMIT
+#Some kind of JS baked into the html output for deleting/hiding unwanted or duplicate results
+#Lightweight DB for 'recording' results?
+#Probably improvements to the 'strict searching' functionality.  Currently doesn't write results
+#to the file unless the result contains the exact search string.  This gets around the 
+#'fuziness' of github search results, but can lead to missing things, especially with queries like
+#(companyname vpn) which might not all get returned in the code snippet.
 ###################################################################################################
 from requests.auth import HTTPBasicAuth
 from gitrekt_paginator import pagination
@@ -18,11 +24,8 @@ import getpass
 #Take user/password/search term.
 parser = argparse.ArgumentParser()
 parser.add_argument('-u', '--user', default = 'invalid',  type=str, help='Github Username')
-#parser.add_argument('-p', '--password', default = 'invalid',  type=str, help='Github Password')
 parser.add_argument('-t', '--term', default = 'invalid', type=str, help='Search Term')
 args = parser.parse_args()
-
-
 
 #Turn our args into vars
 gitUser = args.user
@@ -54,28 +57,32 @@ while (counter < gitPages+1):
                 		data = search.text
                                 #Load the results into the JSON parser
                                 j = json.loads(data)
-                                #Bro I don't even know.  Wrote this code months ago and can't figure out whats going on.  JSON parsing is hard.
+                                #This is really messy.  Sorry.  JSON parsing.
                                 count = len(j["items"])
                                 for x in range(0, count):
-                                        f.write("<RESULT class='result'>")
-                                        f.write("<b>REPO NAME: </b> " + j['items'][x]['repository']['name'])
-                                        f.write("<br>")
-                                        f.write("<b>FILE NAME: </b> " + j['items'][x]['name'])
-                                        f.write("<br>")
-                                        f.write("<b>URL: </b><a href=\" " + j['items'][x]['html_url'])
-                                        f.write("\">LINK</a><br>")
+                                        string = ("<RESULT class='result'>")
+                                        string +=("<b>REPO NAME: </b> " + j['items'][x]['repository']['name'])
+                                        string +=("<br>")
+                                        string +=("<b>FILE NAME: </b> " + j['items'][x]['name'])
+                                        string +=("<br>")
+                                        string +=("<b>URL: </b><a href=\" " + j['items'][x]['html_url'])
+                                        string +=("\">LINK</a><br>")
                                         m = re.search('github.com/(\w+.)/', j['items'][x]['html_url'])
                                         user = m.group(1)
-                                        f.write("<b>USER: </b>")
-                                        f.write(user)
-                                        f.write("<br>")
-					f.write("<b>SNIPPET: </b><pre> ") 
+                                        string +=("<b>USER: </b>")
+                                        string +=(user)
+                                        string +=("<br>")
+					string +=("<b>SNIPPET: </b><pre> ") 
 					code_string = (j['items'][x]['text_matches'][0]['fragment'])
 					escaped = cgi.escape(code_string)
-					f.write(escaped)
-                                        f.write("</pre><br>")
-                                        f.write("</RESULT>")
-                                        f.write("<br><br>\n\n")
+					string +=(escaped)
+                                        string +=("</pre><br>")
+                                        string +=("</RESULT>")
+                                        string +=("<br><br>\n\n")
+					#This is for 'strict searching' to remove 'fuzzy' results.  Needs to be a better way.
+					if gitTerm in string:
+						f.write(string)
+					string = ""
                 except Exception:
                         #We probably caught a rate limit
                         if "abuse-rate-limits" in data:
