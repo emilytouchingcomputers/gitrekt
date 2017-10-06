@@ -1,3 +1,6 @@
+#TODO
+#Download each raw file and then sort them by username or something?
+#
 import mechanize
 import re
 

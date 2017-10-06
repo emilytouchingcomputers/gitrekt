@@ -110,6 +110,8 @@ while (counter < gitPages+1):
 
 f.close()
 ####################################################################################################
+#This kicks off the download of the raw code files from github
+#
 print ("====FINISHED SEARCHING====")
 response = raw_input("download raw code? y/n: ")
 if (response == 'n'):
