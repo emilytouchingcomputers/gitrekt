@@ -11,6 +11,7 @@
 ###################################################################################################
 from requests.auth import HTTPBasicAuth
 from gitrekt_paginator import pagination
+from gitraw import get_raw_results
 import requests
 import json
 import argparse
@@ -19,18 +20,21 @@ import time
 import sys
 import cgi
 import getpass
+import os
 ####################################################################################################
 #Arg Parsing
 #Take user/password/search term.
 parser = argparse.ArgumentParser()
 parser.add_argument('-u', '--user', default = 'invalid',  type=str, help='Github Username')
 parser.add_argument('-t', '--term', default = 'invalid', type=str, help='Search Term')
+parser.add_argument('-s', '--strict', default = 'off', type=str, help='Strict Searching: off || on')
 args = parser.parse_args()
 
 #Turn our args into vars
 gitUser = args.user
 gitTerm = args.term
 gitPages = 0
+gitStrict = args.strict
 #This checks to make sure people filled out all of the args
 if (gitUser == 'invalid' or gitTerm == 'invalid'):
 	parser.print_help()
@@ -47,7 +51,9 @@ header_text_highlite = {'Accept': 'application/vnd.github.v3.text-match+json'}
 counter = 1
 #Yeah so turns out gitPages was returning a string and it was ruining this while test, so now we cast it to int because that wasted 4 hours of my life.
 gitPages = int(gitPages)
-f = open('results_' + gitTerm + "_.html", 'w+')
+if not os.path.exists(gitTerm + "/"):
+	os.mkdir(gitTerm +"/")
+f = open(gitTerm+ '/results_' + gitTerm + "_.html", 'w+')
 while (counter < gitPages+1):
 	with requests.Session() as session:
 		try:
@@ -66,12 +72,16 @@ while (counter < gitPages+1):
                                         string +=("<b>FILE NAME: </b> " + j['items'][x]['name'])
                                         string +=("<br>")
                                         string +=("<b>URL: </b><a href=\" " + j['items'][x]['html_url'])
-                                        string +=("\">LINK</a><br>")
+					string +=("\">LINK</a><br>")
+
+					raw_url = (j['items'][x]['html_url'])
+					raw_url = raw_url.replace('https://github.com', 'https://raw.githubusercontent.com')
+					raw_url = raw_url.replace('/blob/', '/')
+					string += ("<b>RAW: </b><a href=\"" + raw_url + "\">RAW_LINK</a><br>")
+
                                         m = re.search('github.com/(\w+.)/', j['items'][x]['html_url'])
                                         user = m.group(1)
-                                        string +=("<b>USER: </b>")
-                                        string +=(user)
-                                        string +=("<br>")
+                                        string +=("<b>USER: </b>" + user + "<br>")
 					string +=("<b>SNIPPET: </b><pre> ") 
 					code_string = (j['items'][x]['text_matches'][0]['fragment'])
 					escaped = cgi.escape(code_string)
@@ -80,7 +90,10 @@ while (counter < gitPages+1):
                                         string +=("</RESULT>")
                                         string +=("<br><br>\n\n")
 					#This is for 'strict searching' to remove 'fuzzy' results.  Needs to be a better way.
-					if gitTerm in string:
+					if (gitStrict == 'on'): 
+						if gitTerm in string:
+							f.write(string)
+					else:
 						f.write(string)
 					string = ""
                 except Exception:
@@ -97,3 +110,12 @@ while (counter < gitPages+1):
 
 f.close()
 ####################################################################################################
+print ("====FINISHED SEARCHING====")
+response = raw_input("download raw code? y/n: ")
+if (response == 'n'):
+	exit()
+else:
+        filename = (gitTerm +'/results_' + gitTerm + "_.html")
+	filepath = (gitTerm +'/')
+	get_raw_results(filename, filepath)
+
