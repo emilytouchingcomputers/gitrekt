@@ -1,5 +1,5 @@
-#VERSION 0.3b
-#October 4, 2017
+#VERSION 1.0b
+#October 17, 2017
 ##################################################################################################
 #TODO:
 #Some kind of JS baked into the html output for deleting/hiding unwanted or duplicate results as a front end?
