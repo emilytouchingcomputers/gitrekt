@@ -2,32 +2,13 @@ GitRekt
 ===================
 **github code search recon tool**
 
-
-ToDo:
-
-Possible off-by-one on pagination, especially when catching rate limit
-
-----------
-
-
 Use
 -------------
 
-python gitrekt.py -u github_username -p github_pass -t search_term
+python gitrekt.py -u github_username -t search_term -s on -w wordlist.txt
 
-#cat json.txt | python -m json.tool >> pretty.txt
-
-
-HOW TO USE GIT HOLY CRAP
-
-git clone (repoURL)
-
-git pull origin master
-
-git add file_i_changed
-
-git commit -m "comments"
-
-git commit
-
-git push
+> **Args:**
+> - -**u**: 'github username'.  Your github username.
+> - -**t**: 'search term'.  Whatever you want to search for.  i.e. "google.com"
+> - -**s**: 'strict search'.  Only returns a match if it's 1:1 for your search term, i.e. "google.com" won't return com.google 
+> - -**w** 'wordlist'.  "Banned" words. Use this to filter out words or repo names.  If you get a lot of hits for "HTTPS-Everywhere" and don't want them in your results, just add HTTPS-Everywhere to a text file and pass that file in with the -w arg.
