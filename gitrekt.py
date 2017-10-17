@@ -2,12 +2,8 @@
 #October 4, 2017
 ##################################################################################################
 #TODO:
-#Some kind of JS baked into the html output for deleting/hiding unwanted or duplicate results
-#Lightweight DB for 'recording' results?
-#Probably improvements to the 'strict searching' functionality.  Currently doesn't write results
-#to the file unless the result contains the exact search string.  This gets around the 
-#'fuziness' of github search results, but can lead to missing things, especially with queries like
-#(companyname vpn) which might not all get returned in the code snippet.
+#Some kind of JS baked into the html output for deleting/hiding unwanted or duplicate results as a front end?
+#Download raw code from the generated list (download raw code y/n) and then parse through it for 'vpn' or 'admin' or whatever
 ###################################################################################################
 from requests.auth import HTTPBasicAuth
 from gitrekt_paginator import pagination
@@ -28,6 +24,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-u', '--user', default = 'invalid',  type=str, help='Github Username')
 parser.add_argument('-t', '--term', default = 'invalid', type=str, help='Search Term')
 parser.add_argument('-s', '--strict', default = 'off', type=str, help='Strict Searching: off || on')
+parser.add_argument('-w', '--wordlist', default = "DEFAULT_SETTING", type=str, help='Negative wordlist path')
 args = parser.parse_args()
 
 #Turn our args into vars
@@ -35,6 +32,7 @@ gitUser = args.user
 gitTerm = args.term
 gitPages = 0
 gitStrict = args.strict
+gitBanned = args.wordlist
 #This checks to make sure people filled out all of the args
 if (gitUser == 'invalid' or gitTerm == 'invalid'):
 	parser.print_help()
@@ -54,7 +52,15 @@ gitPages = int(gitPages)
 if not os.path.exists(gitTerm + "/"):
 	os.mkdir(gitTerm +"/")
 f = open(gitTerm+ '/results_' + gitTerm + "_.html", 'w+')
-while (counter < gitPages+1):
+#Lets handle our negative wordlist
+boolwordlist = False
+if (gitBanned != 'DEFAULT_SETTING'):
+	boolwordlist = True
+	print("opening " + gitBanned + " as negative word file")
+	with open(gitBanned) as word_file:
+		wordlist_content = [x.strip('\n') for x in word_file.readlines()]
+		print(wordlist_content)
+		while (counter < gitPages+1):
 	with requests.Session() as session:
 		try:
 			with requests.Session() as session:
@@ -89,9 +95,17 @@ while (counter < gitPages+1):
                                         string +=("</pre><br>")
                                         string +=("</RESULT>")
                                         string +=("<br><br>\n\n")
-					#This is for 'strict searching' to remove 'fuzzy' results.  Needs to be a better way.
+					#This is for 'strict searching' to remove 'fuzzy' results. Also parsing out things from the 'banned' wordlist.
 					if (gitStrict == 'on'): 
-						if gitTerm in string:
+						if (gitTerm in string and boolwordlist == True):
+							found = False
+							for word in wordlist_content:
+								if (word.lower() in string.lower()):
+									found = True
+									break
+							if (found == False):
+								f.write(string)
+						elif (gitTerm in string and boolwordlist == False):
 							f.write(string)
 					else:
 						f.write(string)
@@ -110,7 +124,7 @@ while (counter < gitPages+1):
 
 f.close()
 ####################################################################################################
-#This kicks off the download of the raw code files from github
+#This kicks off the (eventual)download of the raw code files from github
 #
 print ("====FINISHED SEARCHING====")
 response = raw_input("download raw code? y/n: ")
