@@ -1,5 +1,5 @@
-#VERSION 1.0b
-#October 17, 2017
+#VERSION 0.3b
+#October 4, 2017
 ##################################################################################################
 #TODO:
 #Some kind of JS baked into the html output for deleting/hiding unwanted or duplicate results as a front end?
@@ -60,7 +60,7 @@ if (gitBanned != 'DEFAULT_SETTING'):
 	with open(gitBanned) as word_file:
 		wordlist_content = [x.strip('\n') for x in word_file.readlines()]
 		print(wordlist_content)
-		while (counter < gitPages+1):
+while (counter < gitPages+1):
 	with requests.Session() as session:
 		try:
 			with requests.Session() as session:
@@ -134,4 +134,3 @@ else:
         filename = (gitTerm +'/results_' + gitTerm + "_.html")
 	filepath = (gitTerm +'/')
 	get_raw_results(filename, filepath)
-
