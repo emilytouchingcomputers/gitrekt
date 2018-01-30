@@ -48,7 +48,11 @@ header_text_highlite = {'Accept': 'application/vnd.github.v3.text-match+json'}
 #While loop and counter for getting all pages of results
 counter = 1
 #Yeah so turns out gitPages was returning a string and it was ruining this while test, so now we cast it to int because that wasted 4 hours of my life.
-gitPages = int(gitPages)
+#If there was only 1 page of results, it returns as NoneType, so this is the workaround instead of fixing it in paginator.
+if (gitPages == None):
+	gitPages = 1
+else:
+	gitPages = int(gitPages)
 if not os.path.exists(gitTerm + "/"):
 	os.mkdir(gitTerm +"/")
 f = open(gitTerm+ '/results_' + gitTerm + "_.html", 'w+')
